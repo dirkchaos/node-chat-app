@@ -1,5 +1,7 @@
 const path = require('path');
 const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
 
 const publicPath = path.join(__dirname, '../public');
 // console.log(publicPath);
@@ -8,9 +10,27 @@ const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 
 var app = express();
+
+// Configure express to work with http because we will use it to add socket.io support
+var server = http.createServer(app);
+
+// Configure our http (Above) to use Sockets & WebSockets
+var io = socketIO(server);
+
+// Register an Event Listener
+// Connection Event
+io.on('connection', (socket) => {
+  console.log('New User Connected '+socket);
+
+  // Disconnection Event
+  socket.on('disconnect', () => {
+    console.log('User was disconnected');
+  });
+});
+
 // Setting up the Middleware
 app.use(express.static(publicPath));
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Started app on port ${port}`);
 });
