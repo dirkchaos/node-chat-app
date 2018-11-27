@@ -11,10 +11,11 @@ socket.on('connect', () => {
   });*/
 
   // Emit createMessage Event
-  socket.emit('createMessage', {
+  /*socket.emit('createMessage', {
     to: 'dell',
     text: 'Hey, DELL.'
-  });
+  });*/
+  
 });
 
 // Disconnection Event

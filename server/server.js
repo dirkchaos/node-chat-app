@@ -36,15 +36,23 @@ io.on('connection', (socket) => {
 
 
   // Emit newMessage Event
-  socket.emit('newMessage', {
+  /*socket.emit('newMessage', {
     from: 'dell',
     text: 'hey, HP.',
     createdAt: 1231321313
-  });
+  });*/
 
   // createMessage Listener
+  // Broadcasting Event
   socket.on('createMessage', (msg) => {
     console.log('createMessage', msg);
+
+    // ************Broadcasting Event************
+    io.emit('newMessage', {
+      from: msg.from,
+      text: msg.text,
+      createdAt : new Date().getTime()
+    });
   });
 
 
