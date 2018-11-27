@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
+const {generateMessage} = require('./utils/message.js')
 const publicPath = path.join(__dirname, '../public');
 // console.log(publicPath);
 
@@ -44,18 +45,10 @@ io.on('connection', (socket) => {
 
 
   // soket.emit from Admin to Welcome to the chat app
-  socket.emit('newMessage', {
-    from: 'Admin',
-    text: 'Welcome to the chat app',
-    createdAt: new Date().getTime()
-  });
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
   // socket.broadcast.emit from Admin text New user joined
-  socket.broadcast.emit('newMessage', {
-      from: 'Admin',
-      text : 'New user joined',
-      createdAt: new Date().getTime()
-  });
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
 
 
@@ -65,11 +58,7 @@ io.on('connection', (socket) => {
     console.log('createMessage', msg);
 
     // ************Send event to all users + {Sender}************
-    /*io.emit('newMessage', {
-      from: msg.from,
-      text: msg.text,
-      createdAt : new Date().getTime()
-    });*/
+    io.emit('newMessage', generateMessage(msg.form, msg.text));
 
     // ************Send event to all users + {Sender}************
     /*socket.broadcast.emit('newMessage', {
