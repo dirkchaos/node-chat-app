@@ -54,11 +54,15 @@ io.on('connection', (socket) => {
 
   // createMessage Listener
   // Broadcasting Event
-  socket.on('createMessage', (msg) => {
+  // Adding Acknowledgement by adding callback()
+  socket.on('createMessage', (msg, callback) => {
     console.log('createMessage', msg);
 
     // ************Send event to all users + {Sender}************
-    io.emit('newMessage', generateMessage(msg.form, msg.text));
+    io.emit('newMessage', generateMessage(msg.from, msg.text));
+
+    // ************Acknowledgement************
+    callback('This is from Server');
 
     // ************Send event to all users + {Sender}************
     /*socket.broadcast.emit('newMessage', {
