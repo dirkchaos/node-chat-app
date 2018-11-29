@@ -3,7 +3,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
-const {generateMessage} = require('./utils/message.js')
+const {generateMessage, generateLocationMessage} = require('./utils/message.js');
 const publicPath = path.join(__dirname, '../public');
 // console.log(publicPath);
 
@@ -75,6 +75,10 @@ io.on('connection', (socket) => {
   });
 
 
+  // Geolocation Message Reciever
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+  });
 
   // Disconnection Event
   socket.on('disconnect', () => {
