@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
     io.emit('newMessage', generateMessage(msg.from, msg.text));
 
     // ************Acknowledgement************
-    callback('This is from Server');
+    callback();
 
     // ************Send event to all users + {Sender}************
     /*socket.broadcast.emit('newMessage', {
