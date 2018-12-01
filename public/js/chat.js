@@ -20,8 +20,21 @@ function scrollToBottom() {
 
 
 // Connection Event
-socket.on('connect', () => {
+socket.on('connect', function () {
   console.log('Connected to server');
+
+  // Get Search Parameters
+  var params = jQuery.deparam(window.location.search);
+
+  socket.emit('join', params, function (err) {
+    if(err) {
+      alert(err);
+      // Redirecting to User to the root page
+      window.location.href = '/';
+    }else {
+      console.log('No error');
+    }
+  });
 
   // Creating Custom Event Listener
   /*socket.emit('createEmail', {
@@ -38,8 +51,20 @@ socket.on('connect', () => {
 });
 
 // Disconnection Event
-socket.on('disconnect', () => {
+socket.on('disconnect', function () {
   console.log('Disconnected from server');
+});
+
+// Update Users Listener
+socket.on('updateUserList', function (users) {
+  // Update the Sidebar
+  var ol = jQuery('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append(jQuery('<li></li>').text(user));
+  });
+
+  jQuery('#users').html(ol);
 });
 
 // Creating and Listening Events
